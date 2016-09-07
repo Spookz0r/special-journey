@@ -3,9 +3,9 @@
 
 Matrix::Matrix(const int & r, const int & c){
 	m_size = std::make_pair(r,c);
-	for(int y = 0; y < columns(); ++y){
-		for(int x = 0; x < rows(); ++x){
-			matrix().insert(std::make_pair(std::make_pair(y,x),0)); //2meta4u
+	for(int x = 0; x < columns(); ++x){
+		for(int y = 0; y < rows(); ++y){
+			matrix().insert(std::make_pair(std::make_pair(x,y),0)); //2meta4u
 		}
 	}
 }
@@ -13,10 +13,10 @@ Matrix::Matrix(const int & r, const int & c){
 Matrix::Matrix(const std::vector<std::string> & input_line){
 	m_size = std::make_pair(stoi(input_line[0]), stoi(input_line[1]));
 	int n = 2;
-	for(int y = 0; y < rows();++y){
-		for(int x = 0; x < columns(); ++x){
+	for(int x = 0; x < rows();++x){
+		for(int y = 0; y < columns(); ++y){
 			double val = atof(input_line[n].c_str());
-			matrix().insert(std::make_pair(std::make_pair(y,x),val));
+			matrix().insert(std::make_pair(std::make_pair(x,y),val));
 			++n;
 		}
 	}
@@ -33,8 +33,8 @@ Matrix Matrix::add(const Matrix & right){
 		+ " + " + std::to_string(right.size().first) + "x" + std::to_string( right.size().second);
 		throw(std::out_of_range(s));
 	}else{
-		for(int y = 0; y < rows() ; ++y){
-			for(int x = 0; x < columns(); ++x){
+		for(int x = 0; x < rows() ; ++x){
+			for(int y = 0; y < columns(); ++y){
 				c.access(x,y) += right.get(x,y);
 			}
 		}
@@ -48,8 +48,8 @@ Matrix Matrix::sub(const Matrix & right ){
 		+ " - " + std::to_string(right.size().first) + "x" + std::to_string( right.size().second);
 		throw(std::out_of_range(s));
 	}else{
-		for(int y = 0; y < rows() ; ++y){
-			for(int x = 0; x < columns(); ++x){
+		for(int x = 0; x < rows() ; ++x){
+			for(int y = 0; y < columns(); ++y){
 				c.access(x,y) -= right.get(x,y);
 			}
 		}
@@ -64,8 +64,8 @@ Matrix Matrix::scale(const Matrix& right){
 		+ " scaled with " + std::to_string(right.size().first) + "x" + std::to_string( right.size().second);
 		throw(std::out_of_range(s));
 	}else{
-		for(int y = 0; y < rows() ; ++y){
-			for(int x = 0; x < columns(); ++x){
+		for(int x = 0; x < rows() ; ++x){
+			for(int y = 0; y < columns(); ++y){
 				c.access(x,y) *= right.get(x,y);
 			}
 		}
@@ -75,8 +75,8 @@ Matrix Matrix::scale(const Matrix& right){
 
 Matrix Matrix::scale(const int & n){
 	Matrix c(*this);
-	for(int y = 0; y < rows() ; ++y){
-		for(int x = 0; x < columns(); ++x){
+	for(int x = 0; x < rows() ; ++x){
+		for(int y = 0; y < columns(); ++y){
 			c.access(x,y) *=n;
 		}
 	}
@@ -175,10 +175,10 @@ void Matrix::transpose(){
 
 void Matrix::print(){
 	std::string s;
-	for(int y = 0; y < rows(); ++y){
+	for(int x = 0; x < rows(); ++x){
 		s = "|";
-		for(int x = 0; x < columns(); ++x){
-			std::string tmp = std::to_string(get(y,x));
+		for(int y = 0; y < columns(); ++y){
+			std::string tmp = std::to_string(get(x,y));
 			if(tmp.length() == 1) tmp += "  ";
 			s += tmp[0];
 			s += tmp[1];

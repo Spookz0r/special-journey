@@ -66,6 +66,11 @@ int main(){
 	C.print();
 	std::cout << std::endl;
 
+	std::cout << "PI'+PI'" << std::endl;
+	C = PI.add(PI);
+	C.print();
+	std::cout << std::endl;
+
 	/*
 	*/
 	std::cout << "Program end" << std::endl;
