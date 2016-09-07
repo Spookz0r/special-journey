@@ -8,10 +8,13 @@
 #include <stdexcept>
 #include <exception>
 
+/*
+https://en.wikipedia.org/wiki/Kahan_summation_algorithm
+https://en.wikipedia.org/wiki/Matrix_multiplication_algorithm
+*/
 class Matrix{
 public:
-	Matrix(const int&x, const int&y);
-	Matrix(const std::pair<int,int> & );
+	Matrix(const int&r, const int&c);
 	Matrix(const std::vector<std::string>&);
 	~Matrix();
 	double & access(const int &, const int &);
@@ -22,13 +25,17 @@ public:
 	Matrix sub(const Matrix &);
 	Matrix scale(const Matrix&);
 	Matrix scale(const int&);
-	Matrix dot(const Matrix &); 
+	Matrix mult(const Matrix &); 
+	int rows();
+	int rows()const;
+	int columns();
+	int columns()const;
 	void transpose();
 	void print(); 
 	std::map<std::pair<int,int>, double> & matrix();
 	const std::map<std::pair<int,int>, double> & matrix()const;
 	const std::pair<int,int> & size()const;
-private:
+private:	
 	std::map<std::pair<int,int>, double> m_matrix;
 	std::pair<int,int> m_size;
 };	
