@@ -16,13 +16,29 @@ Matrix::Matrix(const std::pair<int,int> & nsize):m_size(nsize){
 		}
 	}
 }
+
+Matrix::Matrix(const std::vector<std::string> & input_line){
+	m_size = std::make_pair(stoi(input_line[0]), stoi(input_line[1]));
+	int n = 2;
+	for(int y = 0; y < m_size.second;++y){
+		for(int x = 0; x < m_size.first; ++x){
+			double val = atof(input_line[n].c_str());
+			matrix().insert(std::make_pair(std::make_pair(x,y),val));
+			++n;
+		}
+	}
+}
+
+
 Matrix::~Matrix(){
 
 }
 Matrix Matrix::add(const Matrix & right){
-	Matrix c(size());
+	Matrix c(*this);
 	if(size() != right.size()){ //Throw exeption
-		std::cout << "Waah" << std::endl;
+		std::string s = "In Matrix Matrix::add(const Matrix & right): attempting " + std::to_string( size().first) + "x" + std::to_string( size().second)
+		+ " + " + std::to_string(right.size().first) + "x" + std::to_string( right.size().second);
+		throw(std::out_of_range(s));
 	}else{
 		for(int i = 0; i < size().first ; ++i){
 			for(int j = 0; j < size().second; ++j){
@@ -33,9 +49,11 @@ Matrix Matrix::add(const Matrix & right){
 	return c;	
 }
 Matrix Matrix::sub(const Matrix & right ){
-	Matrix c(size());
+	Matrix c(*this);
 	if(size()!= right.size()){ //Throw exep
-		std::cout << "Waah" << std::endl;
+		std::string s = "In Matrix Matrix::sub(const Matrix & right ): attempting " + std::to_string( size().first) + "x" + std::to_string( size().second)
+		+ " - " + std::to_string(right.size().first) + "x" + std::to_string( right.size().second);
+		throw(std::out_of_range(s));
 	}else{
 		for(int i = 0; i < size().first ; ++i){
 			for(int j = 0; j < size().second; ++j){
@@ -47,9 +65,11 @@ Matrix Matrix::sub(const Matrix & right ){
 }
 
 Matrix Matrix::scale(const Matrix& right){
-	Matrix c(size());
+	Matrix c(*this);
 	if(size()!= right.size()){ //Throw exep
-		std::cout << "Waah" << std::endl;
+		std::string s = "In Matrix Matrix::scale(const Matrix& right): attempting " + std::to_string( size().first) + "x" + std::to_string( size().second)
+		+ " scaled with " + std::to_string(right.size().first) + "x" + std::to_string( right.size().second);
+		throw(std::out_of_range(s));
 	}else{
 		for(int i = 0; i < size().first ; ++i){
 			for(int j = 0; j < size().second; ++j){
@@ -61,8 +81,7 @@ Matrix Matrix::scale(const Matrix& right){
 }
 
 Matrix Matrix::scale(const int & n){
-	Matrix c(size());
-	
+	Matrix c(*this);
 	for(int i = 0; i < size().first ; ++i){
 		for(int j = 0; j < size().second; ++j){
 			c.access(i,j) *=n;
@@ -74,7 +93,9 @@ Matrix Matrix::scale(const int & n){
 Matrix Matrix::dot(const Matrix & right){
 	Matrix c(size().first, right.size().second);
 	if(right.size().first != size().second){ //Throw exeption
-		std::cout << "Waah" << std::endl;
+		std::string s = "In Matrix Matrix::dot(const Matrix & right): attempting " + std::to_string( size().first) + "x" + std::to_string( size().second)
+		+ " (dot) " + std::to_string(right.size().first) + "x" + std::to_string( right.size().second);
+		throw(std::out_of_range(s));
 	}else{
 		int sum;
 		for(int i = 0; i < size().first; ++i){
@@ -116,4 +137,32 @@ std::map<std::pair<int,int>, double> & Matrix::matrix(){
 
 const std::map<std::pair<int,int>, double> & Matrix::matrix()const{
 	return m_matrix;
+}
+
+void Matrix::transpose(){
+	std::map<std::pair<int,int>, double> new_matrix;
+	for(int y = 0; y < size().second;++y){
+		for(int x = 0; x < size().first; ++x){
+			new_matrix[std::make_pair(y,x)] = matrix()[std::make_pair(x,y)];
+		}
+	}
+	matrix() = new_matrix;
+	m_size = std::make_pair(size().second, size().first);
+}
+
+void Matrix::print(){
+	std::string s;
+	for(int i = 0; i < size().second; ++i){
+		s = "|";
+		for(int j = 0; j < size().first; ++j){
+			std::string tmp = std::to_string(get(j,i));
+			if(tmp.length() == 1) tmp += "  ";
+			s += tmp[0];
+			s += tmp[1];
+			s += tmp[2];
+			s += " | ";
+		}
+		std::cout << s;
+		std::cout << std::endl;
+	}
 }

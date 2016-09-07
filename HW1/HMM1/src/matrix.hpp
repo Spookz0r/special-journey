@@ -1,10 +1,18 @@
 #pragma once
 #include <map>
 #include <iostream>
+#include <string>
+#include <vector>
+#include <cmath>
+#include <stdlib.h>
+#include <stdexcept>
+#include <exception>
+
 class Matrix{
 public:
 	Matrix(const int&x, const int&y);
 	Matrix(const std::pair<int,int> & );
+	Matrix(const std::vector<std::string>&);
 	~Matrix();
 	double & access(const int &, const int &);
 	void set(const int &x, const int& y, const double & val);
@@ -14,7 +22,9 @@ public:
 	Matrix sub(const Matrix &);
 	Matrix scale(const Matrix&);
 	Matrix scale(const int&);
-	Matrix dot(const Matrix &);  
+	Matrix dot(const Matrix &); 
+	void transpose();
+	void print(); 
 	std::map<std::pair<int,int>, double> & matrix();
 	const std::map<std::pair<int,int>, double> & matrix()const;
 	const std::pair<int,int> & size()const;
