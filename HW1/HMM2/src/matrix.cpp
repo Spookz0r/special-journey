@@ -3,8 +3,8 @@
 
 Matrix::Matrix(const int & r, const int & c){
 	m_size = std::make_pair(r,c);
-	for(int x = 0; x < columns(); ++x){
-		for(int y = 0; y < rows(); ++y){
+	for(int x = 0; x < rows(); ++x){
+		for(int y = 0; y < columns(); ++y){
 			matrix().insert(std::make_pair(std::make_pair(x,y),0)); //2meta4u
 		}
 	}
@@ -193,18 +193,16 @@ void Matrix::transpose(){
 }
 
 void Matrix::print(){
+	std::cout << std::endl;
 	std::string s;
 	for(int x = 0; x < rows(); ++x){
 		s = "|";
 		for(int y = 0; y < columns(); ++y){
 			std::string tmp = std::to_string(get(x,y));
-			if(tmp.length() == 1) tmp += "  ";
-			s += tmp[0];
-			s += tmp[1];
-			s += tmp[2];
-			s += " | ";
+			std::cout << tmp;
 		}
 		std::cout << s;
 		std::cout << std::endl;
 	}
+	std::cout << std::endl;
 }
