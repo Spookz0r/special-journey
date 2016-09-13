@@ -39,6 +39,9 @@ int main(){
 	for(unsigned int i = 1; i < sequence.size()-1; ++i){
 		O.push_back(atoi(sequence[i].c_str()));
 	}
+	int T = sequence.size();
+	int N = A.rows();
+	int M = B.rows();
 
 
 
@@ -63,6 +66,7 @@ int main(){
 		}
 		Matrix alpha = PI;
 		alphas.push_back(alpha);
+		PI.print();
 
 
 		for(unsigned int i=1; i< O.size();++i){
@@ -164,7 +168,6 @@ int main(){
 						temp_sum_di_gamma += digammas[t].get(i,j);
 						temp_sum_gamma += gammas[t].get(j,0);
 				}
-					std::cout << temp_sum_di_gamma/temp_sum_gamma << std::endl;
 					A.access(i,j) = temp_sum_di_gamma/temp_sum_gamma;
 			}
 
