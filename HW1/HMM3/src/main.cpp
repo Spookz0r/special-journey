@@ -39,85 +39,74 @@ int main(){
 	Matrix PI(matrices[2]);
 	std::vector<std::string> sequence = matrices[3];
 	std::vector<int> O;
-	for(unsigned int i = 1; i < sequence.size(); ++i){
-			
-			if(sequence[i] != "" ){
-			O.push_back(atoi(sequence[i].c_str()));
-			//std::cout << "element: " << i << " value: " << sequence[i] << "\n" ;
-		}
+	for(unsigned int i = 1; i < sequence.size()-1; ++i){
+		O.push_back(atoi(sequence[i].c_str()));
 	}
-	Matrix Deltas(A.rows(),O.size());
-	Matrix DeltaIndex(A.rows(),O.size());
 
-	// Matrices for storing
+
 	// computation 
 	//Step 1: initialize delta1(i)
 
 	// pi * O(sequence_1)
-	int temp_state = 0;
-	double max_tmp = 0;
 	std::vector<int> states;
 
 	for(int i = 0; i < PI.columns(); ++i){
 		PI.access(0,i)*=B.get(i,O[0]);
-		if(PI.access(0,i) > max_tmp){
-			max_tmp = PI.get(0,i);
-			temp_state = i;
-		}
 	}
-	states.push_back(temp_state);
 	Matrix temp_PI = PI;
-	//PI.print();
 
-	// To get the first state, find the which element has max value in PI.
-	
-	// step 2: Loop through the sequence, take out max of each and save argmax state
-	// rows cloumns
-	// max of deltai-1(i)*A[j][i]*B[i][O[k]]
+	std::cout << "A" << std::endl;
+	A.print();
+	std::cout << "B" << std::endl;
+	B.print();
+	std::cout << "PI" << std::endl;
+	PI.print();
 
-	int k  = 0;
-	double max_max_tmp = 0;
-	for(unsigned int L = 1; L < O.size(); ++L)
-	{
-		//std::cout << "L: " << L << " k: " << O[L] << std::endl;
-		k = O[L];
-		max_max_tmp = 0;
-		//std::cout << "Time: " << L << std::endl;
-		for(int i = 0; i < A.rows(); ++i){
-			max_tmp=0;
-
-			//std::cout << "\nNext row: \n\n";
-			for(int j = 0; j < A.columns(); ++j){
-				double val = PI.get(0,j)*A.get(i,j)*B.get(i,k);
-				//std::cout << PI.get(0,j) << " * " << A.get(j,i) << " * " << B.get(i,k) << " = " << val <<std::endl;
-				//std::cout << "val: " << val << " max_tmp: " << max_tmp << std::endl;
-				if(val > max_tmp){
-					max_tmp = val;
-					if(max_tmp > max_max_tmp)
-					{
-						temp_state = i;
-						max_max_tmp = max_tmp;
-					}
-					//temp_state = i;
-					//std::cout << i << std::endl;
+	std::vector<std::vector<std::pair<double, int>>> the_fucking_deltas;
+	for(unsigned int i = 1; i < O.size(); ++i){
+		std::cout << std::endl << "for emission: "<< i << std::endl << std::endl;;
+		std::vector<std::pair<double,int>> delta;
+		for(int j = 0; j < A.rows(); ++j){
+			std::pair<double, int> temp_max = {0,0};
+			std::vector<double> row_values;
+			for(int k = 0; k < temp_PI.columns(); ++k){
+				row_values.push_back(temp_PI.get(0,k)*A.get(k,j)*B.get(j,O[i]));
+				std::cout <<"PI " <<temp_PI.get(0,k) <<" *A " <<A.get(k,j) << " *B " << B.get(j,O[i])<< "=" <<row_values[k]<< std::endl;
+				if(row_values[k] > temp_max.first){
+					std::cout << "A new max is found: " << row_values[k] << " at " << j <<std::endl;
+					temp_max = std::make_pair(row_values[k], j);
 				}
 			}
-			
-			temp_PI.access(0,i) = max_tmp;
-			//std::cout << "tempstate: " << temp_state << std::endl;
+			std::cout << std::endl;
+			delta.push_back(temp_max);
+			//std::cout <<"Max is: "<< temp_max.first <<" at: " << temp_max.second << std::endl;
 		}
 
-		states.push_back(temp_state);
-		PI = temp_PI;
-		//PI.print();
-		
+		the_fucking_deltas.push_back(delta);
+		for(int j = 0; j < temp_PI.columns(); ++j){
+			//std::cout << "i " << i << " j " << j << " = " <<the_fucking_deltas[i-1][j].second << std::endl;
+			temp_PI.access(0,j) = the_fucking_deltas[i-1][j].first;
+		}
+
 	}
 
-	for(auto i: states){
-		std::cout << i << " ";
+	double max = 0;
+	int choice = 0;
+	std::vector<int> choices;
+	for(int j = 0; j < PI.columns(); ++j){
+		if(the_fucking_deltas[the_fucking_deltas.size()-1][j].first > max){
+			max = the_fucking_deltas[the_fucking_deltas.size()-1][j].first;
+			choice = j;
+		}
 	}
 
+	choices.push_back(choice);
 
-
-
+	for(int i = the_fucking_deltas.size()-2; i >= 0; --i){
+		choices.push_back(the_fucking_deltas[i][choices.back()].second);
+	}
+	std::cout << the_fucking_deltas[the_fucking_deltas.size()-1][choice].second << " ";
+	for(int i = choices.size()-1; i >= 0; --i){
+		std::cout << choices[i] << " ";
+	}
 }
