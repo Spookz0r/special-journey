@@ -39,22 +39,20 @@ To restructure the equation so we no longer depend on something something break 
 Question 7:
 Yes. 1000 samples takes 2040 iterations
 	10000 takes 15114 iterations
-convergation is defined as:
-if the logshit starts to increase before maxiters has been attained. 
-The values of the calculated A and B matrices should match the matrices that generated the sequence.
-
+Convergance is when the A and B matrices values converges to the goal matrices. This however differs from the algorithms convergance. 
+The algorithms convergance is when the alphas stop increasing. 
 
 Question 8:
-Somewhere in the same ballpark
-yOU CAN´T ESTIMATE WHAT YOU DON'T KNOW!!!!!!?!!!! GURL
-sOLVE IT BY kNOWING gTHE gHOAL
+Different values in the A-matrix leads to different results. If our initial values are too far away we suffer the risk of getting stuck in a local minimum that is not the correct answer. 
 
 Question 9:
-We get values which does not correspond to a value in the generation matrices.
+We get values which does not correspond to a value in the generation matrices. 
 
-Three hidden states and four observations is the best choice due to the generation matrices are those sizes...
+If we choose too large dimensions we will suffer from overfitting - the model will have a lot more local minimums to get stuck in. 
 
+If we choose too few the algorithm may never converge. 
 
+Balancing these two can give us a hint on the number of states. 
 
 Question 10:
 
