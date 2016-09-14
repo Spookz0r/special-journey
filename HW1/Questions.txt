@@ -16,17 +16,51 @@ Observation probability Matrix B:
 [0.9 0.1]
 [0.5 0.5]
 
-
-
 Question 2:
-A*PI = 
-[0,7]
-[0.3]
-2.3: Summation of the chances that we observe head in a state times the chance we are in that state. 
-2.4 Same
-2.5 Same with numbers
+Multiplying our A matrix with our PI vector gives us an estimate of our states in the next timestep.
+The equations in 2.3-2.5 calculates the probability of seeing heads when flipping a coin. 
 
 Question 3:
-B*PI = 
-[0.5]
-[0.5]
+If we multiply our estimate of states with the observation matrix we get an estimate of what emissions we may see. 
+
+Question 4:
+
+Question 5:
+N = number of states
+T = length of observation sequence
+Size of delta:  N*T
+Size of delta_index = N*(T-1)
+
+
+Question 6:
+To restructure the equation so we no longer depend on something something break out stuff. 
+
+
+Question 7:
+Yes. 1000 samples takes 2040 iterations
+	10000 takes 15114 iterations
+convergation is defined as:
+if the logshit starts to increase before maxiters has been attained. 
+The values of the calculated A and B matrices should match the matrices that generated the sequence.
+
+
+Question 8:
+Somewhere in the same ballpark
+yOU CAN´T ESTIMATE WHAT YOU DON'T KNOW!!!!!!?!!!! GURL
+sOLVE IT BY kNOWING gTHE gHOAL
+
+Question 9:
+We get values which does not correspond to a value in the generation matrices.
+
+Three hidden states and four observations is the best choice due to the generation matrices are those sizes...
+
+
+
+Question 10:
+
+Uniform: 3 iterations. Bad result. More or less the same values as the initialization matrices
+
+diagonal: Dividing by zero -> result NaN
+
+Close to solution: 1948 iterations. Closer than init-matrices but not perfect. Not much better than the init-matrices from question 7.
+
