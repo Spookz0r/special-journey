@@ -12,6 +12,7 @@
 https://en.wikipedia.org/wiki/Kahan_summation_algorithm
 https://en.wikipedia.org/wiki/Matrix_multiplication_algorithm
 */
+
 class Matrix{
 public:
 	Matrix(const int&r, const int&c);

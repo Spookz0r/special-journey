@@ -39,6 +39,7 @@ int main(){
 	Matrix PI(matrices[2]);
 	std::vector<std::string> sequence = matrices[3];
 	std::vector<int> O;
+
 	for(unsigned int i = 1; i < sequence.size()-1; ++i){
 		O.push_back(atoi(sequence[i].c_str()));
 	}
@@ -48,94 +49,82 @@ int main(){
 	//Step 1: initialize delta1(i)
 
 	// pi * O(sequence_1)
-	int temp_state = 0;
-	double max_tmp = 0;
-	std::vector<int> states;
 
 	for(int i = 0; i < PI.columns(); ++i){
 		PI.access(0,i)*=B.get(i,O[0]);
-		if(PI.access(0,i) > max_tmp){
-			max_tmp = PI.get(0,i);
-			temp_state = i;
-		}
 	}
-	states.push_back(temp_state);
 	Matrix temp_PI = PI;
-	
-	// To get the first state, find the which element has max value in PI.
-	
-	// step 2: Loop through the sequence, take out max of each and save argmax state
-	// rows cloumns
-	// max of deltai-1(i)*A[j][i]*B[i][O[k]]
 
-	int k  = 0;
-	for(int L = 1; L < O.size(); ++L)
-	{
-		k = O[L];
-		//std::cout << "Time: " << L << std::endl;
-		for(int i = 0; i < A.rows(); ++i){
-			max_tmp=0;
+	//std::cerr << "A" << std::endl;
+	//A.print();
+	//std::cerr << "B" << std::endl;
+	//B.print();
+	//std::cerr << "PI" << std::endl;
+	//PI.print();
 
-			
-			for(int j = 0; j < A.columns(); ++j){
-				double val = PI.get(0,j)*A.get(j,i)*B.get(i,k);
-				if(val > max_tmp){
-					max_tmp = val;
-					temp_state = i;
-					//std::cout << i << std::endl;
+	std::vector<std::vector<std::pair<double, int>>> the_fucking_deltas;
+
+	for(unsigned int i = 1; i < O.size(); ++i){
+
+		//std::cerr << std::endl << "for emission: "<< i << std::endl << std::endl;;
+		std::vector<std::pair<double,int>> delta;
+
+		for(int j = 0; j < A.rows(); ++j){
+
+			std::pair<double, int> temp_max = {0,0};
+			std::vector<double> row_values;
+
+			for(int k = 0; k < temp_PI.columns(); ++k){
+
+				row_values.push_back(temp_PI.get(0,k)*A.get(k,j)*B.get(j,O[i]));
+				//std::cerr <<"PI" <<temp_PI.get(0,k) <<" *A" <<A.get(k,j) << " *B" << B.get(j,O[i])<< "=" <<row_values[k]<< std::endl;
+				
+				if(row_values[k] > temp_max.first){
+					////std::cerr << "A new max is found: " << row_values[k] << " at " << j <<std::endl;
+					temp_max = std::make_pair(row_values[k], k);
 				}
 			}
-			
-			temp_PI.access(0,i) = max_tmp;
 
+			delta.push_back(temp_max);
+		}
+		the_fucking_deltas.push_back(delta);
+		for(int j = 0; j < temp_PI.columns(); ++j){
+			temp_PI.access(0,j) = the_fucking_deltas[i-1][j].first;
 		}
 
-		states.push_back(temp_state);
-		PI = temp_PI;
-		//PI.print();
-		
 	}
 
-	for(auto i: states){
-  		std::cout << i << " ";
-	}
-
-
-
-
-	/*
-	Matrix tmp_vec(A.rows(), 1);
-	tmp_vec.transpose();
-	
-	for(int L = 1; L < O.size(); ++L)
-	{
-		k = O[L];
-		//std::cout << "K: " << k << std::endl;
-		//std::cout << "########################" << std::endl;
-		for(int i = 0; i < A.rows(); ++i){
-			double tmp = 0;
-			//std::cout << "-------------" << std::endl;
-			for(int j = 0; j < A.columns(); ++j){
-				//std::cout << "A: " << PI.get(0,j) << std::endl;
-				double val = PI.get(0,j)*A.get(j,i);
-				tmp += val;
-			}
-			tmp_vec.access(0,i) = tmp;
+	double max = 0;
+	int choice = 0;
+	std::vector<int> choices;
+	for(int j = 0; j < PI.columns(); ++j){
+		////std::cerr << "fokin deltas "<< the_fucking_deltas[the_fucking_deltas.size()-1][j].first<<std::endl;
+		if(the_fucking_deltas[the_fucking_deltas.size()-1][j].first > max){
+			max = the_fucking_deltas[the_fucking_deltas.size()-1][j].first;
+			choice = j;
+			////std::cerr << the_fucking_deltas[the_fucking_deltas.size()-1][j].second << std::endl;
 		}
-		for(int i = 0; i < tmp_vec.columns(); ++i){
-			//std::cout << "B: " << B.get(i,k) << std::endl;
-			tmp_vec.access(0,i)*= B.get(i,k);
-		}
-		PI = tmp_vec;
 	}
-	double result = 0;
-	for(int i = 0; i < PI.columns(); ++i){
-		result +=PI.get(0,i);
-		//std::cout << PI.get(0,i) << std::endl;
-		//std::cout << result << std::endl;
-	}
-	std::cout << result << std::endl;
-	//PI*A*B
-	*/
+	//printing the deltas 
 
+	for(int i = 0; i < the_fucking_deltas.size(); ++i){
+		//std::cerr << "Delta " << i << std::endl;
+		for(int j = 0; j < the_fucking_deltas[i].size(); ++j){
+			//std::cerr << the_fucking_deltas[i][j].first <<"x" << the_fucking_deltas[i][j].second << std::endl;
+		}
+		//std::cerr << std::endl;
+	}
+
+	////std::cerr << "first: " << choice << std::endl;
+	choices.push_back(choice);
+	////std::cerr << "scond " << the_fucking_deltas[the_fucking_deltas.size()-1][choices.back()].second << std::endl;
+
+	for(int i = the_fucking_deltas.size()-1; i >= 0; --i){
+		choices.push_back(the_fucking_deltas[i][choices.back()].second);
+	}
+	////std::cerr << the_fucking_deltas[the_fucking_deltas.size()-1][choice].second << " ";
+	for(int i = choices.size()-1; i >= 0; --i){
+		std::cout << choices[i] << " ";
+	}
+	std::cout << std::endl;
 }
