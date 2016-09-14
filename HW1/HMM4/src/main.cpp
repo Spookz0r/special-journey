@@ -214,8 +214,10 @@ int main(){
 
 		double logProb = 0;
 		for(int i = 0; i < T; ++i){
-			logProb += log(c[i]);
+			logProb += log(c[i]); //c[i] = 1/sum(alphas[i])
+			std::cout << "c " << c[i] << " log " << -log(c[i]) << std::endl;
 		}
+		//stor c[i] => mindre logProb => mindre alphas
 		logProb = -logProb;
 		/*
 		std::cout << std::endl;
@@ -228,8 +230,14 @@ int main(){
 		B.get_str();
 		std::cout << std::endl;
 		*/
+
+		//Om logprog int har blivit större är vi klara
+		//större logprob = mindre c[i] = större summa av alpha
+		//Alpha = sannolikheten att vi är i state xt = qi, ser serien observationer O0:t
+		//givet vår A,B,pi. 
+		//Om sannolikheten inte ökar är vi klara. 
 		++iters;
-		if(iters > maxIters || logProb < oldLogProb){
+		if(iters > maxIters || !(logProb > oldLogProb)){
 			//std::cout << std::endl;
 			//std::cout << "Done" << std::endl;
 			A.get_str();
