@@ -9,8 +9,8 @@ double irand(double min, double max) {
 
 int main()
 {
-    double COUNT = 4,    // X
-    	ROWS = 5,
+    double COUNT = 9,    // X
+    	ROWS = 1,
         MAX_VAL = 10,  // Y
         MAX_SUM = 10; // Z
 
