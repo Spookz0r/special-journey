@@ -24,6 +24,7 @@ Question 3:
 If we multiply our estimate of states with the observation matrix we get an estimate of what emissions we may see. 
 
 Question 4:
+Every state is only dependant of its previous state. Our state estimate is only dependant of our last observation. 
 
 Question 5:
 N = number of states
@@ -33,14 +34,14 @@ Size of delta_index = N*(T-1)
 
 
 Question 6:
-To restructure the equation so we no longer depend on something something break out stuff. 
+It is a result of the product rule. 
 
 
 Question 7:
 Yes. 1000 samples takes 2040 iterations
 	10000 takes 15114 iterations
 Convergance is when the A and B matrices values converges to the goal matrices. This however differs from the algorithms convergance. 
-The algorithms convergance is when the alphas stop increasing. 
+The algorithms convergance is when the sum(alphas) stop increasing. 
 
 Question 8:
 Different values in the A-matrix leads to different results. If our initial values are too far away we suffer the risk of getting stuck in a local minimum that is not the correct answer. 
